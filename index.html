@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Alunos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2ecc71;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #27ae60;
+        }
+
+        .lista-alunos {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .card-aluno {
+            background: white;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .card-aluno p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .card-aluno strong {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sistema de Cadastro de Alunos</h1>
+
+    <div class="container">
+        <div class="form-group">
+            <label for="nome">Nome do Aluno:</label>
+            <input type="text" id="nome" placeholder="Ex: Ana Silva">
+        </div>
+        <div class="form-group">
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" placeholder="Ex: 16">
+        </div>
+        <div class="form-group">
+            <label for="matricula">Matrícula:</label>
+            <input type="text" id="matricula" placeholder="Ex: 2026001">
+        </div>
+        <div class="form-group">
+            <label for="curso">Curso:</label>
+            <input type="text" id="curso" placeholder="Ex: Desenvolvimento de Sistemas">
+        </div>
+        <button onclick="cadastrarAluno()">Cadastrar Aluno</button>
+    </div>
+
+    <h2>Alunos Cadastrados</h2>
+    <div id="listaAlunos" class="lista-alunos"></div>
+
+    <script>
+        // Definição da Classe Aluno (Conceito de POO)
+        class Aluno {
+            constructor(nome, idade, matricula, curso) {
+                this.nome = nome;
+                this.idade = idade;
+                this.matricula = matricula;
+                this.curso = curso;
+            }
+
+            // Método para gerar o HTML do card do aluno
+            gerarHTML() {
+                return `
+                    <div class="card-aluno">
+                        <p><strong>Nome:</strong> ${this.nome}</p>
+                        <p><strong>Idade:</strong> ${this.idade} anos</p>
+                        <p><strong>Matrícula:</strong> ${this.matricula}</p>
+                        <p><strong>Curso:</strong> ${this.curso}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Array que vai funcionar como o nosso "Banco de Dados" temporário
+        const bancoDeAlunos = [];
+
+        // Função chamada pelo botão do formulário
+        function cadastrarAluno() {
+            // Capturando os valores dos inputs
+            const nome = document.getElementById('nome').value;
+            const idade = document.getElementById('idade').value;
+            const matricula = document.getElementById('matricula').value;
+            const curso = document.getElementById('curso').value;
+
+            // Validação simples para não cadastrar campos vazios
+            if (!nome || !idade || !matricula || !curso) {
+                alert("Por favor, preencha todos os campos!");
+                return;
+            }
+
+            // Criando o Objeto a partir da Classe Aluno
+            const novoAluno = new Aluno(nome, idade, matricula, curso);
+
+            // Guardando o objeto na lista
+            bancoDeAlunos.push(novoAluno);
+
+            // Atualizando a tela
+            atualizarListaDoConsole();
+
+            // Limpando os campos do formulário para o próximo cadastro
+            document.getElementById('nome').value = '';
+            document.getElementById('idade').value = '';
+            document.getElementById('matricula').value = '';
+            document.getElementById('curso').value = '';
+        }
+
+        // Função que renderiza os alunos na tela
+        function atualizarListaDoConsole() {
+            const containerLista = document.getElementById('listaAlunos');
+            containerLista.innerHTML = ''; // Limpa a tela antes de redesenhar
+
+            // Percorre a lista de objetos e adiciona o HTML de cada um na tela
+            bancoDeAlunos.forEach(aluno => {
+                containerLista.innerHTML += aluno.gerarHTML();
+            });
+        }
+    </script>
+
+</body>
+</html>
